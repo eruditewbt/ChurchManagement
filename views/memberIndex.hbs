@@ -1,0 +1,170 @@
+{{! // memberIndex.hbs View
+// This view is for an individual user to see their own profile and activities. It's a more focused view with just one user's data. }}
+{{! <!DOCTYPE html> }}
+<html lang="en">
+  <head>
+    <title>My Profile</title>
+    <link href="style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="font-awesome.min.css" />
+  </head>
+  <body>
+    <nav
+      id="main-nav"
+      class="navbar"
+      {{! id="main-nav" class="navbar profile-navbar" }}
+    >
+      <h4 class="navbar-title">My Profile</h4>
+      <div class="nav-links">
+        <a href="/?agent={{agent}}" {{! class="nav-link" id="home-link" }}>Home</a>
+        <a href="/logout?agent={{agent}}" 
+        {{! class="nav-link" id="logout-link" }}>Logout</a>
+        <button id="toggle" class="dark-toggle">🌙</button>
+      </div>
+    </nav>
+    <main id="profile-main">
+      <div class="container profile-container" id="profile-container">
+        <h1 class="welcome-message profile-heading" id="profile-heading">Hello,
+          {{user.NAME}}!</h1>
+        <div class="profile-sections" id="profile-sections">
+          <div class="profile-section card info-section" id="info-section">
+            <h2 class="section-title"><i class="fa fa-user icon"></i>My
+              Information</h2>
+            <p class="profile-info"><strong>Phone Number:</strong>
+              <span id="profile-phone">{{user.PHONENUMBER}}</span></p>
+            <p class="profile-info"><strong>Email:</strong>
+              <span id="profile-email">{{user.EMAIL}}</span></p>
+            <p class="profile-info"><strong>Unit:</strong>
+              <span id="profile-unit">{{user.UNIT}}</span></p>
+            <p class="profile-info"><strong>Follow Up:</strong>
+              <span id="profile-followup">{{user.FOLLOWUP}}</span></p>
+            <p class="profile-info"><strong>Prayer:</strong>
+              <span id="profile-prayer">{{user.PRAYER}}</span></p>
+          </div>
+          <div
+            class="profile-section card actions-section"
+            id="actions-section"
+          >
+            <h2 class="section-title"><i class="fa fa-cog icon"></i>Possible
+              Actions</h2>
+            <div class="action-buttons">
+              <button
+                id="register-button"
+                class="btn btn-primary"
+                data-user-id="{{user.id}}"
+                data-user-agent="{{agent}}"
+                type="button"
+              >Update Profile</button>
+              <!-- Modal for update-user form -->
+              <div id="update-user-modal" class="modal">
+                <div class="modal-content" id="update-user-modal-content">
+                  <span
+                    class="close modal-close"
+                    id="close-update-user-modal"
+                  >&times;</span>
+                  <div id="update-user-form-container">
+                    <!-- The update-user form will be loaded here via AJAX -->
+                  </div>
+                </div>
+              </div>
+              <button class="btn btn-secondary" id="request-help-btn">Request
+                Help</button>
+            </div>
+          </div>
+
+          <div
+            class="profile-section card activities-section"
+            id="activities-section"
+          >
+            <h2 class="section-title"><i class="fa fa-list icon"></i>My
+              Activities</h2>
+            <div class="activity-buttons">
+              <button
+                class="btn btn-primary activity-btn"
+                id="add-activity-btn"
+                data-user-id="{{user.id}}"
+                data-user-agent="{{agent}}"
+                data-activity-type="Prayer"
+              >Add Prayer Activity</button>
+              <button
+                class="btn btn-primary activity-btn"
+                id="add-activity-btn"
+                data-user-id="{{user.id}}"
+                data-user-agent="{{agent}}"
+                data-activity-type="Attendance"
+              >Mark Attendance</button>
+            </div>
+            {{#if activities}}
+              <table
+                class="table table-striped activity-list"
+                id="activity-list"
+              >
+                <thead>
+                  <tr>
+                    <th>Performer</th>
+                    <th>Activity Type</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Response</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#each activities}}
+                    <tr class="activity-item">
+                      <td class="activity-performer">{{this.PERFORMER}}</td>
+                      <td class="activity-type">{{this.ACTIVITYTYPE}}</td>
+                      <td class="activity-date">{{this.DATE}}</td>
+                      <td class="activity-time">{{this.TIME}}</td>
+                      <td class="activity-response">{{this.RESPONSE}}</td>
+                    </tr>
+                  {{/each}}
+                </tbody>
+              </table>
+            {{else}}
+              <p class="no-activities">You have no recorded activities yet.</p>
+            {{/if}}
+
+            <!-- Modal for adding activity response -->
+            <div id="activity-modal" class="modal activity-modal">
+              <div class="modal-content activity-modal-content">
+                <span class="close modal-close">&times;</span>
+                <h2 class="modal-title">Add Activity Response</h2>
+                <form id="activity-form" class="activity-form">
+                  <label for="response" class="form-label">Response:</label>
+                  <textarea
+                    id="response"
+                    name="response"
+                    class="form-control"
+                  ></textarea>
+                  <button
+                    type="submit"
+                    class="btn btn-primary submit-btn"
+                    data-user-agent="{{agent}}"
+                  >Submit</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    {{#if success_msg}}
+      <div id="popup-success" class="popup-message success alert alert-success">
+        <span class="popup-icon">✔️</span>
+        <span>{{success_msg}}</span>
+        <button class="popup-close">&times;</button>
+      </div>
+    {{/if}}
+    {{#if error_msg}}
+      <div id="popup-error" class="popup-message error alert alert-danger">
+        <span class="popup-icon">❌</span>
+        <span>{{error_msg}}</span>
+        <button class="popup-close">&times;</button>
+      </div>
+    {{/if}}
+    <footer class="footer" id="main-footer">
+      <p class="footer-text">&copy; 2025 Church Member Management. All rights
+        reserved.</p>
+    </footer>
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,232 @@
+{{! index.hbs View
+Next, modify the index.hbs file to include a modal and JavaScript that interacts with the new API endpoint. The JavaScript will dynamically fetch the user's data and populate the modal with it. }}
+
+<html lang="en">
+  <head>
+    <title>Workers Dashboard</title>
+    <link href="style.css" rel="stylesheet" />
+    <!-- External CSS (Bootstrap, Font Awesome, etc.) -->
+    <!-- icons -->
+    <link rel="stylesheet" href="font-awesome.min.css" />
+  </head>
+  <body>
+    <nav id="main-nav" class="navbar">
+      <h4 class="navbar-title">Workers Dashboard</h4>
+      <div class="nav-icons">
+        <a
+          href="/register?agent={{agent}}"
+          {{! class="nav-icon-link" id="register-link" }}
+        >
+          <i class="fas fa-user-plus" title="Register New User">+</i>
+        </a>
+        <a
+          href="/member-statistics?agent={{agent}}"
+          {{! class="nav-icon-link" id="logout-link" }}
+        >
+          <i class="fas fa-globe" title="Logout">stat</i>
+        </a>
+        <a
+          href="/logout?agent={{agent}}"
+          {{! class="nav-icon-link" id="logout-link" }}
+        >
+          <i class="fas fa-sign-out-alt" title="Logout">Logout</i>
+        </a>
+        <button id="toggle" class="dark-toggle">🌙</button>
+      </div>
+    </nav>
+
+    <main>
+      <div>
+        <a
+          href="/search-members?agent={{agent}}"
+          {{! class="nav-icon-link" id="logout-link" }}
+        >
+          <i class="fas fa-search" title="Search">Search Members</i>
+        </a>
+        <button
+          {{! onclick="openExcelModal()" }}
+          {{! class="nav-icon-button" }}
+          id="excel-upload-btn"
+        >
+          <i class="fas fa-file-excel" title="Upload Excel Sheet">U</i>
+        </button>
+      </div>
+      <div class="container dashboard-container" id="dashboard-main">
+        <h1 class="dashboard-heading">Welcome, Worker!</h1>
+
+        <div class="dashboard-section user-list-section" id="user-list-section">
+          <h2 class="section-title">User List</h2>
+          <table class="table table-striped user-list" id="user-list">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Unit</th>
+                <th>Phone</th>
+                <th>Follow Up</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each users}}
+                <tr class="user-item" data-user="{{this}}">
+                  <td class="user-name">{{this.NAME}}</td>
+                  <td class="user-unit">{{this.UNIT}}</td>
+                  <td class="user-unit">{{this.PHONENUMBER}}</td>
+                  <td class="user-unit">{{this.FOLLOWUP}}</td>
+                  <td>
+                    <button
+                      id="see-logs"
+                      class="btn btn-info"
+                      data-user-id="{{this.id}}"
+                      data-user-agent="{{agent}}"
+                    >View Activity</button>
+                    <button
+                      class="btn btn-primary activity-btn"
+                      id="add-activity-btn"
+                      data-user-id="{{this.id}}"
+                      data-user-agent="{{agent}}"
+                      phone-number="{{this.PHONENUMBER}}"
+                      data-activity-type="call"
+                    ><i class="fa fa-phone"></i>Call</button>
+                    <button
+                      class="btn btn-primary activity-btn"
+                      id="add-activity-btn"
+                      data-user-id="{{this.id}}"
+                      data-user-agent="{{agent}}"
+                      data-activity-type="pray"
+                    >Pray</button>
+                    <a href="/events?email={{this.EMAIL}}?agent={{agent}}"><i
+                        class="fas fa-email"
+                        title="Send Email"
+                      >Send Email</i></a>
+                  </td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="dashboard-section unit-list-section" id="unit-list-section">
+          <h2 class="section-title">Units</h2>
+          <table class="table table-striped unit-list" id="unit-list">
+            <thead>
+              <tr><th>Unit</th></tr>
+            </thead>
+            <tbody>
+              {{#each units}}
+                <tr class="unit-item"><td>{{this.unit}}</td></tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+
+        <div
+          class="dashboard-section activity-list-section"
+          id="activity-list-section"
+        >
+          <h2 class="section-title">Recent Activities</h2>
+          <table class="table table-striped activity-list" id="activity-list">
+            <thead>
+              <tr>
+                <th>Performer</th>
+                <th>Activity Type</th>
+                <th>Date</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each activities}}
+                <tr class="activity-item">
+                  <td class="activity-performer">{{this.PERFORMER}}</td>
+                  <td class="activity-type">{{this.ACTIVITYTYPE}}</td>
+                  <td class="activity-date">{{this.DATE}}</td>
+                  <td class="activity-time">{{this.TIME}}</td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="userModal" class="modal user-modal">
+        <div class="modal-content user-modal-content">
+          <span
+            class="close modal-close"
+            {{! onclick="closeUserModal()" }}
+          >&times;</span>
+          <div id="modal-activity-content" class="modal-activity-content">
+          </div>
+        </div>
+      </div>
+
+      <div id="excelModal" class="modal excel-modal">
+        <div class="modal-content excel-modal-content">
+          <span
+            id="close-excel"
+            class="close modal-close"
+            {{! onclick="closeExcelModal()" }}
+          >&times;</span>
+          <h2 class="modal-title">Upload Excel Sheet</h2>
+          <form
+            action="/upload-excel?agent={{agent}}"
+            method="POST"
+            enctype="multipart/form-data"
+            class="excel-upload-form"
+          >
+            <div class="form-group excel-form-group">
+              <label for="excelFile" class="form-label">Select File</label>
+              <input
+                type="file"
+                name="excelFile"
+                id="excelFile"
+                class="form-control-file"
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              class="btn btn-primary excel-upload-btn"
+            >Upload</button>
+          </form>
+        </div>
+      </div>
+    </main>
+    <div id="activity-modal" class="modal activity-modal">
+      <div class="modal-content activity-modal-content">
+        <span class="close modal-close">&times;</span>
+        <h2 class="modal-title">Add Activity Response</h2>
+        <form id="activity-form" class="activity-form">
+          <label for="response" class="form-label">Response:</label>
+          <textarea
+            id="response"
+            name="response"
+            class="form-control"
+          ></textarea>
+          <button
+            type="submit"
+            class="btn btn-primary submit-btn"
+          >Submit</button>
+        </form>
+      </div>
+    </div>
+    {{#if success_msg}}
+      <div id="popup-success" class="popup-message success alert alert-success">
+        <span class="popup-icon">✔️</span>
+        <span>{{success_msg}}</span>
+        <button class="popup-close">&times;</button>
+      </div>
+    {{/if}}
+    {{#if error_msg}}
+      <div id="popup-error" class="popup-message error alert alert-danger">
+        <span class="popup-icon">❌</span>
+        <span>{{error_msg}}</span>
+        <button class="popup-close">&times;</button>
+      </div>
+    {{/if}}
+    <footer class="footer" id="main-footer">
+      <p class="footer-text">&copy; 2025 Church Member Management. All rights
+        reserved.</p>
+    </footer>
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,45 @@
+<main>
+  <div class="container">
+    <h1>Member Statistics</h1>
+    <p>Total Members: {{totalMembers}}</p>
+    <p>Active Members: {{activeMembers}}</p>
+    <h2>Member Growth</h2>
+    <table
+      class="table table-striped member-growth-table"
+      id="member-growth-table"
+    >
+      <thead>
+        <tr><th>Month</th><th>Count</th></tr>
+      </thead>
+      <tbody>
+        {{#each memberGrowth}}
+          <tr><td>{{month}}</td><td>{{count}}</td></tr>
+        {{/each}}
+      </tbody>
+    </table>
+    <h2>Recent Members</h2>
+    <table
+      class="table table-striped recent-members-table"
+      id="recent-members-table"
+    >
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Attendance</th>
+          <th>Activity</th>
+          <th>Unit</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each recentMembers}}
+          <tr>
+            <td>{{this.NAME}}</td>
+            <td>{{this.ATTENDANCECOUNT}}</td>
+            <td>{{this.ACTIVITYCOUNT}}</td>
+            <td>{{this.UNIT}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</main>

@@ -1,0 +1,44 @@
+{{! *Error Page HTML* }}
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Access Denied</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      /* Error access denied Page CSS (in file) */ .error-container { display:
+      flex; flex-direction: column; align-items: center; justify-content:
+      center; height: 100vh; background-color: #f7f7f7; } .error-container h1 {
+      font-size: 36px; font-weight: bold; margin-bottom: 20px; color: #333; }
+      .error-container p { font-size: 18px; margin-bottom: 40px; color: #666; }
+      .btn { background-color: #4caf50; color: #fff; padding: 10px 20px; border:
+      none; border-radius: 5px; cursor: pointer; margin: 10px; } .btn:hover {
+      background-color: #3e8e41; }
+    </style>
+  </head>
+  <body>
+    <div class="error-container">
+      <h1>Access Denied</h1>
+      <p>You do not have the necessary permissions to access this page.</p>
+      <p>Error Code: 403 Forbidden</p>
+      <button id="go-home" class="btn" >Go Home</button>
+      <button id="go-back" class="btn" >Go Back</button>
+    </div>
+    {{#if success_msg}}
+      <div id="popup-success" class="popup-message success alert alert-success">
+        <span class="popup-icon">✔️</span>
+        <span>{{success_msg}}</span>
+        <button class="popup-close">&times;</button>
+      </div>
+    {{/if}}
+    {{#if error_msg}}
+      <div id="popup-error" class="popup-message error alert alert-danger">
+        <span class="popup-icon">❌</span>
+        <span>{{error_msg}}</span>
+        <button class="popup-close">&times;</button>
+      </div>
+    {{/if}}
+  </body>
+  <script src="script.js"></script>
+</html>

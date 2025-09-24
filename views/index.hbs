@@ -1,0 +1,81 @@
+{{! Base HomePage }}
+
+<html lang="en">
+  <head>
+    <title>Node.js Database App</title>
+    <link href="style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="font-awesome.min.css" />
+  </head>
+  <body>
+    <nav id="main-nav" class="navbar">
+      <h4 class="navbar-title">Node.js Database App</h4>
+      <div class="nav-links">
+        <a href="/?agent={{agent}}" {{! class="nav-link" id="home-link" }}>Home</a>
+        <a href="/login?agent={{agent}}" {{! class="nav-link" id="login-link" }}>Login</a>
+        <a
+          href="/register?agent={{agent}}"
+          {{! class="nav-link" id="register-link" }}
+        >Register</a>
+        <button id="toggle" class="dark-toggle">🌙</button>
+      </div>
+    </nav>
+    <main class="container" {{! home-container" id="home-main" }}>
+      <div class="container mt-4">
+        <h1 class="home-heading">Welcome to Church Member Management</h1>
+        <p class="home-description">This is a web application built with
+          <strong>Node.js</strong>
+          and
+          <strong>Express.js</strong>. It's designed to manage church member
+          data, including personal profiles and activities.</p>
+        <p class="home-features-title">Key features include:</p>
+        <ul class="feature-list" id="feature-list">
+          <li class="feature-item"><i class="fa fa-check icon"></i><strong
+            >Member Registration</strong>: Create new member profiles with
+            contact details and other relevant information.</li>
+          <li class="feature-item"><i class="fa fa-check icon"></i><strong
+            >Member Login</strong>: Members can log in to view and manage their
+            profiles.</li>
+          <li class="feature-item"><i class="fa fa-check icon"></i><strong>Data
+              Management</strong>: Store and retrieve member profiles, contact
+            details, and a history of their activities.</li>
+          <li class="feature-item"><i class="fa fa-check icon"></i><strong
+            >Custom Queries</strong>: Easily search for members, filter lists,
+            and view detailed information.</li>
+        </ul>
+        <div class="call-to-action dark-blue-bg" id="home-cta">
+          <p class="cta-text">To get started, please
+            <strong>Login</strong>
+            if you are a returning member or
+            <strong>Register</strong>
+            a new member account.</p>
+          <button class="btn btn-primary cta-btn" id="login-btn"><i
+              class="fa fa-sign-in icon"
+            ></i><a href="/login?agent={{agent}}" class="btn btn-primary">Login Now</a></button>
+          <button class="btn btn-primary cta-btn" id="register-btn"><i
+              class="fa fa-user-plus icon"
+            ></i><a href="/register?agent={{agent}}" class="btn btn-primary">Register New Member</a></button>
+        </div>
+      </div>
+    </main>
+    {{#if success_msg}}
+      <div id="popup-success" class="popup-message success alert alert-success">
+        <span class="popup-icon">✔️</span>
+        <span>{{success_msg}}</span>
+        <button class="popup-close">&times;</button>
+      </div>
+    {{/if}}
+    {{#if error_msg}}
+      <div id="popup-error" class="popup-message error alert alert-danger">
+        <span class="popup-icon">❌</span>
+        <span>{{error_msg}}</span>
+        <button class="popup-close">&times;</button>
+      </div>
+    {{/if}}
+    <footer class="footer" id="main-footer">
+      <p class="footer-text">&copy;
+        {{date}}
+        Church Member Management. All rights reserved.</p>
+    </footer>
+    <script src="script.js"></script>
+  </body>
+</html>

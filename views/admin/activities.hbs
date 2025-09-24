@@ -1,0 +1,25 @@
+<!-- views/admin/activities.hbs -->
+
+<div class="activities-page">
+  <h1>Activities</h1>
+  <table class="table table-striped activity-table" id="admin-activities-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Activity Type</th>
+        <th>Date</th>
+        <th>Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each activities}}
+        <tr>
+          <td>{{this.id}}</td>
+          <td>{{this.ACTIVITYTYPE}}</td>
+          <td>{{this.DATE}}</td>
+          <td>{{this.TIME}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>

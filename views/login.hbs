@@ -1,0 +1,93 @@
+{{! 
+login.hbs View
+This view now includes fields for First Name, Phone Number, and an optional Authorization Token. }}
+
+
+<html lang="en">
+
+  <head>
+    <title>Login Page</title>
+    <link href="style.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <nav id="main-nav" class="navbar">
+      <h4 class="navbar-title">USER LOGIN</h4>
+      <div>
+        <a href="/?agent={{agent}}">Home</a>
+        <a href="/login?agent={{agent}}">Login</a>
+        <a href="/register?agent={{agent}}">Register</a>
+      </div>
+    </nav>
+
+    <main>
+      <div class="container mt-4">
+        <div class="card" 
+        style="width: 18rem; align-self: center;"
+        >
+          <div class="card-header">Login</div>
+          <div class="card-body">
+            <form action="/login?agent={{agent}}" method="POST">
+              <div class="mb-3">
+                <label for="firstName-input" class="form-label">First Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="firstName-input"
+                  name="firstName"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="phoneNumber-input" class="form-label">Phone Number /
+                  Email</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="phoneNumber-input"
+                  name="phoneNumber"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="authToken-input" class="form-label">Authorization
+                  Token (Optional)</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="authToken-input"
+                  name="authToken"
+                />
+              </div>
+
+              <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    {{#if success_msg}}
+      <div id="popup-success" class="popup-message success alert alert-success">
+        <span class="popup-icon">✔️</span>
+        <span>{{success_msg}}</span>
+        <button
+          class="popup-close"
+        >&times;</button>
+      </div>
+    {{/if}}
+    {{#if error_msg}}
+      <div id="popup-error" class="popup-message error alert alert-danger">
+        <span class="popup-icon">❌</span>
+        <span>{{error_msg}}</span>
+        <button
+          class="popup-close"
+        >&times;</button>
+      </div>
+    {{/if}}
+    <footer>
+      <p>&copy; 2025 Church Member Management. All rights reserved.</p>
+    </footer>
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,28 @@
+<!-- views/admin/users.hbs -->
+
+<div class="users-page">
+  <h1>Users</h1>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each users}}
+      <tr>
+        <td>{{this.id}}</td>
+        <td>{{this.NAME}}</td>
+        <td>{{this.EMAIL}}</td>
+        <td>
+          <a href="/admin/users/edit/{{this.id}}?agent={{agent}}">Edit</a>
+          <a href="/admin/users/delete/{{this.id}}?agent={{agent}}">Delete</a>
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>

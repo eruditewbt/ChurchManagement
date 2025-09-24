@@ -1,0 +1,40 @@
+{{!-- Unit.hbs --}}
+
+<main>
+  <div class="container">
+
+    <h1>Unit: {{unitName}}</h1>
+
+    <form>
+
+      <select name="unit" onchange="location = this.value;">
+
+        {{#each units}}
+
+          <option value="/unit/{{this.name}}" {{#ifCond this.name unitName}}selected{{/ifCond}}>{{this.name}}</option>
+
+        {{/each}}
+
+      </select>
+
+    </form>
+
+    <table class="table table-striped unit-users-table" id="unit-users-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each users}}
+          <tr>
+            <td>{{NAME}}</td>
+            <td>{{EMAIL}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+  </div>
+</main>

@@ -1,0 +1,78 @@
+<!-- search-members.hbs -->
+
+<main>
+  <div class="container">
+    <h1>Search Members</h1>
+    <form action="/search-members?agent={{agent}}" method="get">
+      <input
+        type="search"
+        name="q"
+        placeholder="Search members"
+        value="{{query}}"
+      />
+      <button type="submit">Search</button>
+    </form>
+    {{#if members}}
+      <table
+        class="table table-striped search-members-table"
+        id="search-members-table"
+      >
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Unit</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each members}}
+            <tr class="user-item">
+              <td>{{this.NAME}}</td>
+              <td>{{this.UNIT}}</td>
+              <td>
+                <button
+                  class="btn btn-primary edit-user-btn"
+                  data-user-id="{{this.id}}"
+                  data-user-agent="{{agent}}"
+                  type="button"
+                >Edit</button>
+                <a>View Profile</a>
+              </td>
+            </tr>
+            <!-- Modal for update-user form -->
+            <div id="update-user-modal" class="modal">
+              <div class="modal-content" id="update-user-modal-content">
+                <span
+                  class="close modal-close"
+                  id="close-update-user-modal"
+                >&times;</span>
+                <div id="update-user-form-container"></div>
+              </div>
+            </div>
+            <script>
+              document.addEventListener('DOMContentLoaded', function () { const
+              editBtns = document.querySelectorAll('.edit-user-btn'); const
+              modal = document.getElementById('update-user-modal'); const
+              modalContent =
+              document.getElementById('update-user-form-container'); const
+              closeModal = document.getElementById('close-update-user-modal');
+              if (editBtns && modal && modalContent && closeModal) {
+              editBtns.forEach(function (btn) { btn.addEventListener('click',
+              function () { const userId = btn.getAttribute('data-user-id');
+              const agent = btn.getAttribute('data-user-agent');
+              fetch(`/update-user/${userId}?agent=${agent}`) .then(res =>
+              res.text()) .then(html => { modalContent.innerHTML = html;
+              modal.style.display = 'block'; }); }); }); closeModal.onclick =
+              function () { modal.style.display = 'none'; modalContent.innerHTML
+              = ''; }; window.onclick = function (event) { if (event.target ==
+              modal) { modal.style.display = 'none'; modalContent.innerHTML =
+              ''; } }; } });
+            </script>
+          {{/each}}
+        </tbody>
+      </table>
+    {{else}}
+      <p>No members found.</p>
+    {{/if}}
+  </div>
+</main>
